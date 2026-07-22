@@ -1,9 +1,23 @@
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+
+
 
 export default function Categories() {
   return (
     <View>
-      <Text className="text-red-500 text-3xl">Add Price</Text>
+      <Text style={styles.categoryText}>Add Price</Text>
     </View>
   );
 }
+
+
+
+
+
+
+const styles = StyleSheet.create({
+  categoryText: {
+    color: "red",
+    fontSize: 24,
+  },
+});

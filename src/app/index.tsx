@@ -1,17 +1,17 @@
 import Categories from "@/components/categories";
-import { StatusBar, View } from "react-native";
+import { StatusBar, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView>
       <StatusBar
       translucent
       backgroundColor="transparent"
       barStyle="dark-content"
       />
 
-      <View className="px-2 py-4">
+      <View style={styles.container}>
         <Categories />
         
 
@@ -22,3 +22,10 @@ export default function HomeScreen() {
     </SafeAreaView>
   );
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+  }
+})
