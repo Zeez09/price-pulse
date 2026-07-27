@@ -1,35 +1,5 @@
-import Categories from "@/components/categories";
-import Swiper from "@/components/swiper";
-import { StatusBar, StyleSheet, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Redirect } from "expo-router";
 
-export default function HomeScreen() {
-  return (
-    <SafeAreaView>
-      <StatusBar
-      translucent
-      backgroundColor="transparent"
-      barStyle="dark-content"
-      />
-
-      <View style={styles.container}>
-
-        <Swiper />
-        <Categories />
-        
-
-
-      </View>
-      
-      
-    </SafeAreaView>
-  );
+export default function Index() {
+  return <Redirect href="/" />;
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    gap: 16,
-  }
-})
