@@ -1,4 +1,5 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { BlurView } from "expo-blur";
 import { Tabs } from "expo-router";
 
 
@@ -9,6 +10,18 @@ export default function TabLayout () {
             tabBarActiveTintColor: "#9333EA",
             tabBarInactiveTintColor: "#94A3B8",
             headerShown: false,
+            tabBarBackground: () => (
+            
+            <BlurView
+            intensity={80}
+            tint="light"
+            style={{
+              flex: 1,
+              borderRadius: 30,
+              overflow: "hidden",
+            }}
+          />
+            ),
 
             tabBarStyle: {
                 position: "absolute",
@@ -16,13 +29,16 @@ export default function TabLayout () {
                 marginHorizontal: 20,
                 height: 55,
                 borderRadius: 30,
-                backgroundColor: "#1e293b",
+                backgroundColor: "transparent",
                 borderTopWidth: 0,
-                elevation: 10,
+                elevation: 6,
                 shadowColor: "#000",
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.15,
-                shadowRadius: 12,
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.05,
+                shadowRadius: 20,
+                overflow: "hidden",
+                borderWidth: 1,
+                borderColor: "rgba(255,255,255,0.15)",
             },
 
             tabBarShowLabel: false,
@@ -64,9 +80,9 @@ export default function TabLayout () {
 
 
         <Tabs.Screen name="profile" options={{ title: "Profile",
-            tabBarIcon: ({ color, size, focused }) => (
+            tabBarIcon: ({ color, focused }) => (
                 <MaterialCommunityIcons name={focused ? "account" : "account-outline"} 
-                color={color} size={size}/>
+                color={color} size={28}/>
          )
          }} />
 
