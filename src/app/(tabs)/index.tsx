@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.safeArea}>
       <StatusBar
       translucent
       backgroundColor="transparent"
@@ -28,6 +28,11 @@ export default function HomeScreen() {
 
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
+
+
   container: {
     padding: 16,
     gap: 16,

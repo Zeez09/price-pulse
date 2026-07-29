@@ -1,34 +1,56 @@
-import { StatusBar, StyleSheet, Text, View } from 'react-native'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { FONTS } from "../../constants/fonts";
 
-import { SafeAreaView } from 'react-native-safe-area-context'
+export default function Profile() {
+  const router = useRouter();
 
-export default function Profile () {
-    return (
-        <SafeAreaView>
-            <StatusBar
-            translucent
-            backgroundColor="transparent"
-            barStyle="dark-content"
-                />
 
-            <View style={styles.container}> 
-            <Text style={styles.header}>Profile Screen</Text>
-            </View>
-        </SafeAreaView>
-    )
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
+
+      <View style={styles.container}>
+        <View style={styles.head}>
+          <TouchableOpacity onPress={() => router.back()}>
+            <MaterialCommunityIcons name='chevron-left' size={26} color="black"/>
+          </TouchableOpacity>
+          <Text style={styles.profile}>Profile</Text>
+          
+        </View>
+      </View>
+    </SafeAreaView>
+  );
 }
 
-
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-        gap: 16,
-    },
+  safeArea: {
+    flex: 1,
+  },
 
-    header: {
-        color: "red",
-    }
+  container: {
+    flex: 1,
+    padding: 16,
+    gap: 16,
+  },
 
+  head: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16
 
-})
+  },
+
+  profile: {
+    fontSize: 24,
+    fontFamily: FONTS.bold,
+
+  },
+});
