@@ -1,3 +1,4 @@
+import { FONTS } from "@/constants/fonts";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -95,5 +96,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "500",
     color: "#334155",
+    fontFamily: FONTS.regular,
   },
 });

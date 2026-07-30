@@ -1,6 +1,6 @@
 export const FONTS = {
-    regular: "Poppins_400Regular",
-    medium: "Poppins_500Medium",
-    bold: "Poppins_700Bold",
+    regular: "PlayfairDisplay_400Regular",
+    medium: "PlayfairDisplay_500Medium",
+    bold: "PlayfairDisplay_700Bold",
 
 }

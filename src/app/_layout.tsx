@@ -1,12 +1,12 @@
-import { Poppins_400Regular, Poppins_500Medium, Poppins_700Bold, useFonts } from "@expo-google-fonts/poppins";
+import { PlayfairDisplay_400Regular, PlayfairDisplay_500Medium, PlayfairDisplay_700Bold, useFonts } from "@expo-google-fonts/playfair-display";
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
-    Poppins_400Regular,
-    Poppins_500Medium,
-    Poppins_700Bold,
+    PlayfairDisplay_400Regular,
+    PlayfairDisplay_500Medium,
+    PlayfairDisplay_700Bold,
   });
 
   if (!fontsLoaded) {
