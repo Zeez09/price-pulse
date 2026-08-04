@@ -1,8 +1,8 @@
+import { FONTS } from "@/constants/fonts";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { FONTS } from "../../constants/fonts";
 
 
 export default function Profile() {
@@ -32,7 +32,7 @@ export default function Profile() {
       </View>
 
 
-      <TouchableOpacity style={styles.faqs}>
+      <TouchableOpacity style={styles.faqs} onPress={() => router.push("/help")}>
         <View style={styles.faqsection}>
           <View style ={styles.faqbar}>
             <View style ={styles.symbol}>
@@ -57,7 +57,7 @@ export default function Profile() {
 
 
 
-      <TouchableOpacity style={styles.login}>
+      <TouchableOpacity style={styles.login} >
         <Text style={styles.logintxt}>Login</Text>
       </TouchableOpacity>
 
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   head: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 16
+    gap: 16,
 
   },
 
