@@ -1,50 +1,109 @@
 import { FONTS } from "@/constants/fonts";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ChevronRight, Mail, MessageCircle } from "lucide-react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { MessageCircle } from "lucide-react-native";
 
 export default function Help() {
   const router = useRouter();
 
   return (
-    <SafeAreaView style={styles.SafeArea}> 
-    <StatusBar
-    translucent
-    barStyle="dark-content"
-    backgroundColor="transparent"/>
+    <SafeAreaView style={styles.SafeArea}>
+      <View style={styles.mainContainer}>
 
-    <View style={styles.mainContainer}>
+        <View style={styles.container}>
+          <TouchableOpacity
+            style={styles.helpPage}
+            onPress={() => router.push("/(tabs)/profile")}
+          >
+            <MaterialCommunityIcons name="arrow-left" size={26} />
 
-   
+            <Text style={styles.txt}>
+              Get Help
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.helpPage} onPress={() => router.push("/(tabs)/profile")}>
-        <MaterialCommunityIcons name="arrow-left" size={26}/>
-        <Text style={styles.txt}>
-          Get Help
-        </Text>
-      </TouchableOpacity>
+        <View>
+          <TouchableOpacity style={styles.chatSection}>
+            <View style={styles.chatView}>
+              <MessageCircle
+                size={24}/>
 
-    </View>
+              <Text style={styles.txt1}>
+                Chat
+              </Text>
+            </View>
 
-    <View >
-      <View style={styles.chatSection}>
-        <MessageCircle size={40} color="black" />
-        <Text>
-          Chat
-        </Text>
+            <ChevronRight />
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+        </View>
+
+        <View>
+          <TouchableOpacity style={styles.chatSection}>
+            <View style={styles.chatView}>
+              <Mail
+                size={24}/>
+
+              <Text style={styles.txt1}>
+                Email
+              </Text>
+            </View>
+
+            <ChevronRight />
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+        </View>
+
+        <View>
+          <TouchableOpacity style={styles.chatSection}>
+            <View style={styles.chatView}>
+              <FontAwesome name="twitter" size={24} color="black" />
+
+              <Text style={styles.txt1}>
+                Twitter
+              </Text>
+            </View>
+
+            <ChevronRight />
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+        </View>
+
+
+        <View>
+          <TouchableOpacity style={styles.chatSection}>
+            <View style={styles.chatView}>
+              <FontAwesome name="instagram" size={24} color="black" />
+
+              <Text style={styles.txt1}>
+                Instagram
+              </Text>
+            </View>
+
+            <ChevronRight />
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+        </View>
+
       </View>
 
-    </View>
 
-    </View>
-    
+
     </SafeAreaView>
   );
 }
-
 
 const styles = StyleSheet.create({
   SafeArea: {
@@ -53,8 +112,7 @@ const styles = StyleSheet.create({
 
   mainContainer: {
     padding: 16,
-    gap: 16,
-
+    gap: 24,
   },
 
   container: {
@@ -72,9 +130,28 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.regular,
   },
 
+  chatView: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+
   chatSection: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8
-  }
-})
+    justifyContent: "space-between",
+  },
+
+  divider: {
+    height: 1,
+    backgroundColor: "#ccc",
+    marginVertical: 20,
+    width: "100%",
+  },
+
+  txt1: {
+    fontSize: 14,
+    fontFamily: FONTS.regular,
+  },
+});
+
