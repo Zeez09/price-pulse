@@ -2,6 +2,7 @@ import { FONTS } from "@/constants/fonts";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import {
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -32,9 +33,7 @@ export default function Profile() {
         {/* FAQs & Support */}
         <TouchableOpacity
           style={styles.faqs}
-          
-          onPress={() =>
-          router.push("/help")}
+          onPress={() => router.push("/help")}
         >
           <View style={styles.faqbar}>
             <View style={styles.symbol}>
@@ -64,19 +63,15 @@ export default function Profile() {
         </TouchableOpacity>
 
         {/* Login */}
-        <View
-  style={{
-    backgroundColor: "red",
-    padding: 20,
-  }}
-  onTouchEnd={() => {
-    console.log("VIEW TOUCHED");
-  }}
->
-  <Text style={{ color: "white" }}>
-    Login
-  </Text>
-</View>
+        <Pressable
+          style={styles.login}
+          onPress={() => {
+            console.log("LOGIN PRESSED");
+            router.push("/help");
+          }}
+        >
+          <Text style={styles.logintxt}>Login</Text>
+        </Pressable>
 
         {/* Version */}
         <View style={styles.bottombar}>
@@ -172,4 +167,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: FONTS.regular,
   },
+
+
 });
