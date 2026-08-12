@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   bubble3: {
     position: "absolute",
     right: 0,
-    top: 20,
+    top: 150,
 
   }
 });
