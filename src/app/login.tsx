@@ -27,6 +27,7 @@ export default function login() {
         <Text style={styles.txt1}>Good to see you back!</Text>
 
         <TextInput placeholder="Email" style={styles.input}></TextInput>
+        <TextInput placeholder="Password" style={styles.input} secureTextEntry={true}></TextInput>
       </View>
 
       <BubbleIllustrations width={200} height={200} style={styles.bubblebottom} pointerEvents="none"/>
