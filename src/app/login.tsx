@@ -1,49 +1,122 @@
 import { FONTS } from "@/constants/fonts";
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from "expo-router";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import BubbleIllustrations from "../../assets/images/illustrations/bubble-01.svg";
 import BubbleIllustrations2 from "../../assets/images/illustrations/bubble-02.svg";
 import BubbleIllustrations3 from "../../assets/images/illustrations/bubble-03.svg";
 
+export default function Login() {
+  const router = useRouter();
 
 
 
 
-export default function login() {
   return (
     <SafeAreaView style={styles.safeArea}>
-    
-      <View style={styles.container}>
-        
-        <BubbleIllustrations2 width={300} height={300} style={styles.bubble2}/>
-        <BubbleIllustrations width={200} height={200} style={styles.bubble1}/>
-        <BubbleIllustrations3 width={100} height={100} style={styles.bubble3}/>
+      <KeyboardAvoidingView
+        style={styles.keyboardView}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        {/* Background bubbles */}
+        <View style={styles.bubblesContainer} pointerEvents="none">
+          <BubbleIllustrations2
+            width={300}
+            height={300}
+            style={styles.bubble2}
+          />
 
-      </View>
+          <BubbleIllustrations
+            width={200}
+            height={200}
+            style={styles.bubble1}
+          />
 
+          <BubbleIllustrations3
+            width={100}
+            height={100}
+            style={styles.bubble3}
+          />
 
-      <View style={styles.loginContainer}>
-        <Text style={styles.txt}>Login</Text>
-        <Text style={styles.txt1}>Good to see you back!</Text>
+          <BubbleIllustrations
+            width={200}
+            height={200}
+            style={styles.bubbleBottom}
+          />
+        </View>
 
-        <TextInput placeholder="Email" style={styles.input}></TextInput>
-        <TextInput placeholder="Password" style={styles.input} secureTextEntry={true}></TextInput>
-      </View>
+        {/* Login content */}
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.loginContainer}>
+            <Text style={styles.txt}>Login</Text>
 
-      <BubbleIllustrations width={200} height={200} style={styles.bubblebottom} pointerEvents="none"/>
+            <Text style={styles.txt1}>Good to see you back!</Text>
+
+            <TextInput
+              placeholder="Email"
+              placeholderTextColor="#6B7280"
+              style={styles.input}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+
+            <TextInput
+              placeholder="Password"
+              placeholderTextColor="#6B7280"
+              style={styles.input}
+              secureTextEntry
+            />
+
+            <TouchableOpacity style={styles.loginBtn} activeOpacity={0.8}>
+              <Text style={styles.loginTxt}>Login</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.txt1}>
+              Don't have an account yet?{" "}
+              <Text onPress={() => router.push("/signup")} style={styles.signUpTxt}>
+                Sign up
+              </Text>
+            </Text>
+            <Text style={styles.txt1}>or</Text>
+            <Text style={styles.txt1}>continue as <Text onPress={() => router.push("/")} style={styles.signUpTxt}>
+                guest
+              </Text></Text>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
-  )
+  );
 }
-
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
 
-  container: {
+  keyboardView: {
     flex: 1,
-    position: "relative",
+  },
+
+  bubblesContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 0,
   },
 
   bubble1: {
@@ -57,26 +130,35 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
   },
-    
 
   bubble3: {
     position: "absolute",
-    right: 0,
     top: 250,
+    right: 0,
+  },
 
+  bubbleBottom: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    transform: [{ rotate: "180deg" }],
+  },
+
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingVertical: 40,
   },
 
   loginContainer: {
-    flex: 1,
-    justifyContent: "center",
     alignItems: "center",
-    position: "relative",
     zIndex: 10,
   },
 
   txt: {
     fontSize: 52,
-    fontFamily: FONTS.bold, 
+    fontFamily: FONTS.bold,
+    marginBottom: 4,
   },
 
   txt1: {
@@ -89,20 +171,31 @@ const styles = StyleSheet.create({
     height: 70,
     backgroundColor: "#D1D5DB",
     borderRadius: 14,
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
+    fontSize: 17,
+    fontFamily: FONTS.regular,
     marginTop: 12,
-
   },
 
-  bubblebottom: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    transform: [{ rotate: "180deg"}],
-    zIndex: 1,
+  loginBtn: {
+    width: "80%",
+    height: 70,
+    backgroundColor: "#9333EA",
+    borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 24,
   },
 
+  loginTxt: {
+    fontFamily: FONTS.bold,
+    color: "#FFFFFF",
+    fontSize: 20,
+  },
 
-
-
+  signUpTxt: {
+    marginTop: 14,
+    fontFamily: FONTS.bold,
+    color: "#9333EA",
+  },
 });
