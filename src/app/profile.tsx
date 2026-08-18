@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
 
   login: {
     width: "100%",
-    backgroundColor: "#E6E6FA",
+    backgroundColor: "#9333EA",
     borderRadius: 12,
     alignItems: "center",
     padding: 20,
