@@ -109,7 +109,7 @@ export default function Verification() {
             </TouchableOpacity>
 
             
-            <TouchableOpacity
+            <TouchableOpacity onPress={() => router.push("/") }
               style={[
                 styles.verifyBtn,
                 otp.length !== 6 && styles.verifyBtnDisabled,
