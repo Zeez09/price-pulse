@@ -7,10 +7,12 @@ require("dotenv").config();
 const express = require("express");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 
 const app = express();
 const PORT = 5000;
+app.use("/api/users", userRoutes);
 
 app.use(express.json())
 
