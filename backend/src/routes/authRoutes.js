@@ -2,6 +2,7 @@ const express = require("express");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -92,16 +93,19 @@ router.post("/login", async (req, res) => {
 
     if (!user) {
         return res.status(400).json({
-            message: "invalid email or password"
+            message: "Invalid email or password"
         });
     }
 
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    const isPasswordCorrect = await bcrypt.compare(
+        password,
+        user.password
+    );
 
-    if (isPasswordCorrect) {
-        res.status(400).json({
-            message: "invalid email or password"
-        })
+    if (!isPasswordCorrect) {
+        return res.status(400).json({
+            message: "Invalid email or password"
+        });
     }
 
     if (!user.isVerified) {
@@ -111,15 +115,24 @@ router.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign(
-    { userId: user._id }, 
-    process.env.JWT_SECRET, 
-    { expiresIn: "1d" });
+        { userId: user._id },
+        process.env.JWT_SECRET,
+        { expiresIn: "1d" }
+    );
 
     res.json({
         message: "Login successful",
         token
     });
+});
 
+router.get("/me", authMiddleware, async (req, res) => {
+    const user = await User.findById(req.user).select("-password -otp -otpEexpires");
+
+    res.json({
+        message: "You are authenticated",
+        user
+    });
 });
 
 module.exports = router;
