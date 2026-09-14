@@ -1,4 +1,5 @@
 import Categories from "@/components/categories";
+import ProductCard from "@/components/productCard";
 import Swiper from "@/components/swiper";
 import { StatusBar, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,6 +17,7 @@ export default function HomeScreen() {
 
         <Swiper />
         <Categories />
+        <ProductCard/>
         
 
 
