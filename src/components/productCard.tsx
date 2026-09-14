@@ -1,31 +1,58 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { FONTS } from "@/constants/fonts";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const ProductCard = () => {
+interface ProductCardProps {
+  name: string;
+  size: string;
+  price: number;
+  image: string;
+}
+
+const ProductCard = ({
+  name,
+  size,
+  price,
+  image,
+}: ProductCardProps) => {
   return (
-    <TouchableOpacity className="w-[160px] rounded-2xl bg-white p-3">
-      <View className="h-[120px] items-center justify-center rounded-xl bg-gray-100">
+    <TouchableOpacity>
+      <View>
         <Image
-          source={{
-            uri: "https://images.unsplash.com/photo-1585238342024-78d387f4a707?w=500",
-          }}
-          className="h-full w-full"
-          resizeMode="contain"
+          source={{ uri: image }}
+          style={styles.productImage}
+          
         />
       </View>
 
-      <Text className="mt-3 text-base font-semibold text-gray-900">
-        Indomie
+      <Text style={styles.txt}
+        numberOfLines={1} 
+      >
+        {name}
       </Text>
 
-      <Text className="mt-1 text-sm text-gray-500">
-        70g
+      <Text style={styles.txt}>
+        {size}
       </Text>
 
-      <Text className="mt-2 text-lg font-bold text-gray-900">
-        ₦500
+      <Text style={styles.txt}>
+        ₦{price.toLocaleString()}
       </Text>
     </TouchableOpacity>
   );
 };
 
 export default ProductCard;
+
+
+
+const styles = StyleSheet.create({
+
+  productImage: {
+    borderRadius: "12",
+  },
+
+  txt: {
+    fontFamily: FONTS.regular,
+    
+  }
+})
