@@ -17,7 +17,7 @@ export default function Swiper() {
         loop={true}
         autoPlay={true}
         autoPlayInterval={3000}
-        height={100}
+        height={200}
         data={images}
         scrollAnimationDuration={1000}
         renderItem={({item}) => (
@@ -26,6 +26,7 @@ export default function Swiper() {
                 flex: 1,
                 borderRadius: 12,
                 overflow: "hidden",
+                marginTop: 16,
             }}
             >
             <Image 

@@ -8,51 +8,74 @@ interface ProductCardProps {
   image: string;
 }
 
-const ProductCard = ({
-  name,
-  size,
-  price,
-  image,
-}: ProductCardProps) => {
+const ProductCard = ({ name, size, price, image }: ProductCardProps) => {
   return (
-    <TouchableOpacity>
-      <View>
+    <TouchableOpacity style={styles.card}>
+      <View style={styles.imageContainer}>
         <Image
           source={{ uri: image }}
           style={styles.productImage}
-          
+          resizeMode="contain"
         />
       </View>
 
-      <Text style={styles.txt}
-        numberOfLines={1} 
-      >
-        {name}
-      </Text>
+      <View style={styles.textContainer}>
+        <Text style={styles.txt1} numberOfLines={1}>
+          {name}
+        </Text>
 
-      <Text style={styles.txt}>
-        {size}
-      </Text>
+        <Text style={styles.txt}>{size}</Text>
 
-      <Text style={styles.txt}>
-        ₦{price.toLocaleString()}
-      </Text>
+        <Text style={styles.txtPrice}>₦{price.toLocaleString()}</Text>
+      </View>
     </TouchableOpacity>
   );
 };
 
 export default ProductCard;
 
-
-
 const styles = StyleSheet.create({
+  imageContainer: {
+    width: "100%",
+    height: 130,
+    borderRadius: 12,
+    backgroundColor: "#F5F5F5",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 
   productImage: {
-    borderRadius: "12",
+    width: 200,
+    height: 110,
+    borderRadius: 12,
+  },
+
+  txt1: {
+    fontFamily: FONTS.medium,
+    fontSize: 16,
   },
 
   txt: {
     fontFamily: FONTS.regular,
+    fontSize: 12,
+  },
+
+  txtPrice: {
+    fontFamily: FONTS.bold,
+  },
+
+  card: {
+    width: 300,
+    marginRight: 12,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    padding: 10,
+  },
+
+  textContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     
   }
-})
+});
