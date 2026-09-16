@@ -17,6 +17,9 @@ const HomeHeader = () => {
 
     return "Good evening";
   };
+
+  const notificationCount = 3;
+
   return (
     <View style={styles.container}>
       <View>
@@ -24,7 +27,17 @@ const HomeHeader = () => {
 
       <Text style={styles.subtitle}>Here's what's happening around you</Text>
     </View>
-    <Bell/>
+    <View style={styles.notificationContainer}>
+        <Bell size={24} />
+
+        {notificationCount > 0 && (
+          <View style={styles.notificationBadge}>
+            <Text style={styles.notificationText}>
+              {notificationCount > 99 ? "99+" : notificationCount}
+            </Text>
+          </View>
+        )}
+      </View>
     </View>
   );
 };
@@ -48,4 +61,28 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.regular,
     fontSize: 12,
   },
+
+    notificationContainer: {
+    position: "relative",
+  },
+
+  notificationBadge: {
+    position: "absolute",
+    top: -6,
+    right: -8,
+    minWidth: 17,
+    height: 17,
+    borderRadius: 9,
+    backgroundColor: "red",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 4,
+  },
+
+  notificationText: {
+    color: "white",
+    fontSize: 9,
+    fontWeight: "700",
+  },
+
 });

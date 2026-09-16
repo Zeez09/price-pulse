@@ -20,12 +20,11 @@ export default function HomeScreen() {
         <HomeHeader/>
         <Swiper />
         <Categories />
-
         <View style={styles.productSection}>
         <View style={styles.productHeader}>
         <Text style={styles.title}>Popular Products</Text>
         <TouchableOpacity style={styles.seeAll}>
-          View all
+          <Text>View all</Text>
         </TouchableOpacity>
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
