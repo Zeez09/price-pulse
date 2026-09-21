@@ -20,11 +20,12 @@ export default function HomeScreen() {
         <HomeHeader/>
         <Swiper />
         <Categories />
+
         <View style={styles.productSection}>
         <View style={styles.productHeader}>
         <Text style={styles.title}>Popular Products</Text>
         <TouchableOpacity style={styles.seeAll}>
-          <Text>View all</Text>
+          <Text style={styles.txt1}>View all</Text>
         </TouchableOpacity>
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -38,6 +39,17 @@ export default function HomeScreen() {
             />
           ))}
         </ScrollView>
+        </View>
+
+        <View style={styles.trendingSection}>
+          <View style={styles.trendingHeader}>
+            <Text style={styles.title}> Trending Prices</Text>
+            <TouchableOpacity style={styles.seeAll}>
+              <Text style={styles.txt1}>
+                See all
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -61,11 +73,14 @@ const styles = StyleSheet.create({
 
   productHeader: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 
   seeAll: {
-    backgroundColor: "#9333EA",
+    backgroundColor: "#E9D5FF",
+    padding: 12,
+    borderRadius: 22,
   },
 
   title: {
@@ -73,4 +88,23 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.regular,
     fontWeight: "700",
   },
+
+  txt1 : {
+    fontFamily: FONTS.regular,
+    fontSize: 14,
+    fontWeight: "500",
+  },
+
+    trendingSection: {
+    gap: 16,
+    marginTop: 20,
+  },
+
+  trendingHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+
 });
