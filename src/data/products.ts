@@ -4,6 +4,7 @@ export const products = [
     name: "Indomie",
     size: "70g",
     price: 500,
+    previousPrice: 450,
     image: "https://picsum.photos/300/300?random=1",
   },
   {
@@ -11,6 +12,7 @@ export const products = [
     name: "Peak Milk",
     size: "400g",
     price: 4500,
+    previousPrice: 4800,
     image: "https://picsum.photos/300/300?random=2",
   },
   {
@@ -18,6 +20,7 @@ export const products = [
     name: "Milo",
     size: "400g",
     price: 5200,
+    previousPrice: 5000,
     image: "https://picsum.photos/300/300?random=3",
   },
   {
@@ -25,6 +28,7 @@ export const products = [
     name: "Golden Penny",
     size: "500g",
     price: 1200,
+    previousPrice: 1350,
     image: "https://picsum.photos/300/300?random=4",
   },
 ];

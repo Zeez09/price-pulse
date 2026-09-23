@@ -15,6 +15,15 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
+  const trendingProducts = products.map((product) => {
+    const priceChange = ((product.price - product.previousPrice) / product.price) * 100;
+    return {
+      ...product,
+      priceChange,
+    };
+  });
+
+  
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar
