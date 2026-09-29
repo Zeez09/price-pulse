@@ -6,9 +6,16 @@ interface ProductCardProps {
   size: string;
   price: number;
   image: string;
+  priceChange?: number;
 }
 
-const ProductCard = ({ name, size, price, image }: ProductCardProps) => {
+const ProductCard = ({
+  name,
+  size,
+  price,
+  image,
+  priceChange,
+}: ProductCardProps) => {
   return (
     <TouchableOpacity style={styles.card}>
       <View style={styles.imageContainer}>
@@ -20,13 +27,24 @@ const ProductCard = ({ name, size, price, image }: ProductCardProps) => {
       </View>
 
       <View style={styles.textContainer}>
-        <Text style={styles.txt1} numberOfLines={1}>
-          {name}
-        </Text>
+        <View>
+          <Text style={styles.txt1} numberOfLines={1}>
+            {name}
+          </Text>
 
-        <Text style={styles.txt}>{size}</Text>
+          <Text style={styles.txt}>{size}</Text>
+        </View>
 
-        <Text style={styles.txtPrice}>₦{price.toLocaleString()}</Text>
+        <View style={styles.priceContainer}>
+          <Text style={styles.txtPrice}>₦{price.toLocaleString()}</Text>
+
+          {priceChange !== undefined && (
+            <Text style={priceChange >= 0 ? styles.priceUp : styles.priceDown}>
+              {priceChange >= 0 ? "↑" : "↓"}{" "}
+              {Math.abs(priceChange).toFixed(1)}%
+            </Text>
+          )}
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -76,6 +94,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    
-  }
+  },
+
+  priceContainer: {
+    alignItems: "flex-end",
+  },
+
+  priceUp: {
+    fontFamily: FONTS.medium,
+    fontSize: 12,
+    color: "#16A34A",
+  },
+
+  priceDown: {
+    fontFamily: FONTS.medium,
+    fontSize: 12,
+    color: "#DC2626",
+  },
 });

@@ -1,111 +1,290 @@
-import { FONTS } from '@/constants/fonts'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import ProductCard from "@/components/productCard";
+import SearchCategories from "@/components/searchCategories";
+import { FONTS } from "@/constants/fonts";
+import { products } from "@/data/products";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useState } from "react";
+import {
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function Search () {
-    return (
-        <SafeAreaView style={styles.safeArea}>
-            <StatusBar
-            translucent
-            barStyle="dark-content"
-            backgroundColor="transparent"/>
+export default function Search() {
+  const [searchQuery, setSearchQuery] = useState("");
 
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-        <View style={styles.container}>
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar
+        translucent
+        barStyle="dark-content"
+        backgroundColor="transparent"
+      />
 
-            <View style={styles.searchBar}>
-                <MaterialCommunityIcons name='magnify' size={20} color="#6B7280"/>
-                <TextInput style={styles.input}
-                placeholder='Food, drinks, groceries.....'>
+      <View style={styles.container}>
+        <View style={styles.searchBar}>
+          <MaterialCommunityIcons name="magnify" size={20} color="#6B7280" />
 
-                </TextInput>
+          <TextInput
+            style={styles.input}
+            placeholder="Food, drinks, groceries..."
+            placeholderTextColor="#6B7280"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+        </View>
 
-            </View>
+        {searchQuery.length > 0 ? (
+          <View style={styles.resultsSection}>
+            <Text style={styles.txt}>Search results</Text>
 
+            {filteredProducts.length > 0 ? (
+              <View style={styles.resultsList}>
+                {filteredProducts.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    name={product.name}
+                    size={product.size}
+                    price={product.price}
+                    image={product.image}
+                    priceChange={
+                      ((product.price - product.previousPrice) /
+                        product.previousPrice) *
+                      100
+                    }
+                  />
+                ))}
+              </View>
+            ) : (
+              <View style={styles.emptyState}>
+                <MaterialCommunityIcons
+                  name="magnify-close"
+                  size={40}
+                  color="#9CA3AF"
+                />
+
+                <Text style={styles.emptyTitle}>No products found</Text>
+
+                <Text style={styles.emptyText}>
+                  Try searching for another product.
+                </Text>
+              </View>
+            )}
+          </View>
+        ) : (
+          <>
+            <SearchCategories />
 
             <View style={styles.searchesSection}>
-                <View style={styles.searchHeader}>
-                    <Text style={styles.txt}>
-                        Recent searches
-                    </Text>
-                    <MaterialCommunityIcons name= "history" size={24} color="#C8A2C8"/>
+              <View style={styles.searchHeader}>
+                <Text style={styles.txt}>Recent searches</Text>
 
-                </View>
+                <MaterialCommunityIcons
+                  name="history"
+                  size={24}
+                  color="#C8A2C8"
+                />
+              </View>
+
+              <View style={styles.tagsContainer}>
+                <TouchableOpacity style={styles.tag}>
+                  <Text style={styles.tagText}>Indomie</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.tag}>
+                  <Text style={styles.tagText}>Peak Milk</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.tag}>
+                  <Text style={styles.tagText}>Golden Penny</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-
 
             <View style={styles.searchesSection}>
-                <View style={styles.searchHeader}>
-                    <Text style={styles.txt}>
-                        Trending
-                    </Text>
-                    <MaterialCommunityIcons name='trending-up' size={24} color="#C8A2C8"/>
-                </View>
+              <View style={styles.searchHeader}>
+                <Text style={styles.txt}>Trending</Text>
 
+                <MaterialCommunityIcons
+                  name="trending-up"
+                  size={24}
+                  color="#C8A2C8"
+                />
+              </View>
+
+              <View style={styles.trendingList}>
+                <TouchableOpacity style={styles.trendingItem}>
+                  <Text style={styles.trendingNumber}>01</Text>
+                  <Text style={styles.trendingText}>Indomie</Text>
+
+                  <MaterialCommunityIcons
+                    name="arrow-top-right"
+                    size={18}
+                    color="#16A34A"
+                  />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.trendingItem}>
+                  <Text style={styles.trendingNumber}>02</Text>
+                  <Text style={styles.trendingText}>Rice</Text>
+
+                  <MaterialCommunityIcons
+                    name="arrow-top-right"
+                    size={18}
+                    color="#16A34A"
+                  />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.trendingItem}>
+                  <Text style={styles.trendingNumber}>03</Text>
+                  <Text style={styles.trendingText}>Cooking Oil</Text>
+
+                  <MaterialCommunityIcons
+                    name="arrow-top-right"
+                    size={18}
+                    color="#16A34A"
+                  />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.trendingItem}>
+                  <Text style={styles.trendingNumber}>04</Text>
+                  <Text style={styles.trendingText}>Peak Milk</Text>
+
+                  <MaterialCommunityIcons
+                    name="arrow-top-right"
+                    size={18}
+                    color="#16A34A"
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
-
-
-            </View>
-        </SafeAreaView>
-    )
+          </>
+        )}
+      </View>
+    </SafeAreaView>
+  );
 }
 
-
-
 const styles = StyleSheet.create({
-    safeArea: {
-        flex: 1,
-    },
+  safeArea: {
+    flex: 1,
+  },
 
-    container: {
-        padding: 16,
-        gap: 16,
-    },
+  container: {
+    padding: 16,
+    gap: 16,
+  },
 
-    searchBar: {
-        flexDirection: "row",
-        alignItems: "center",
-        backgroundColor: "#D1D5DB",
-        borderRadius: 14,
-        paddingHorizontal: 12,
-        height: 60,
-        borderColor: "#6666",
-        borderWidth: 1,
+  searchBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#D1D5DB",
+    borderRadius: 14,
+    paddingHorizontal: 12,
+    height: 60,
+    borderColor: "#6666",
+    borderWidth: 1,
+  },
 
-    },
+  input: {
+    flex: 1,
+    marginLeft: 12,
+    fontSize: 14,
+    fontFamily: FONTS.regular,
+  },
 
-    input: {
-        width: "100%",
-        flex: 1,
-        marginLeft: 12,
-        fontSize: 14,
-        fontFamily: FONTS.regular
+  searchesSection: {
+    marginTop: 20,
+  },
 
-    },
+  searchHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
 
+  txt: {
+    fontFamily: FONTS.regular,
+    fontSize: 18,
+  },
 
-    searchesSection: {
-        marginTop: 20,
+  tagsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    marginTop: 14,
+  },
 
-    },
+  tag: {
+    backgroundColor: "#F3E8FF",
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 20,
+  },
 
-    searchHeader: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between"
+  tagText: {
+    fontFamily: FONTS.regular,
+    fontSize: 13,
+  },
 
-    },
+  trendingList: {
+    marginTop: 12,
+  },
 
-    txt: {
-        fontFamily: FONTS.regular,
-        fontSize: 18,
+  trendingItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
+  },
 
-    },
+  trendingNumber: {
+    width: 35,
+    fontFamily: FONTS.medium,
+    fontSize: 13,
+    color: "#9CA3AF",
+  },
 
+  trendingText: {
+    flex: 1,
+    fontFamily: FONTS.medium,
+    fontSize: 15,
+  },
 
+  resultsSection: {
+    marginTop: 20,
+    gap: 14,
+  },
 
+  resultsList: {
+    gap: 12,
+  },
 
+  emptyState: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 50,
+  },
 
+  emptyTitle: {
+    fontFamily: FONTS.medium,
+    fontSize: 16,
+    marginTop: 12,
+  },
 
-})
+  emptyText: {
+    fontFamily: FONTS.regular,
+    fontSize: 13,
+    color: "#6B7280",
+    marginTop: 5,
+  },
+});

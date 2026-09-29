@@ -1,9 +1,11 @@
 import Categories from "@/components/categories";
+import FeaturedProductCard from "@/components/featuredProducts";
 import HomeHeader from "@/components/homeHeader";
 import ProductCard from "@/components/productCard";
 import Swiper from "@/components/swiper";
 import { FONTS } from "@/constants/fonts";
 import { products } from "@/data/products";
+import { getRandomProducts } from "@/data/utils";
 import {
   ScrollView,
   StatusBar,
@@ -15,15 +17,32 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
-  const trendingProducts = products.map((product) => {
-    const priceChange = ((product.price - product.previousPrice) / product.price) * 100;
+  const popularProducts = getRandomProducts(products, 6);
+
+  const trendingProducts = getRandomProducts(
+    products.filter(
+      (product) => !popularProducts.some((popular) => popular.id === product.id)
+    ),
+    4
+  ).map((product) => {
+    const priceChange =
+      ((product.price - product.previousPrice) / product.previousPrice) * 100;
+
     return {
       ...product,
       priceChange,
     };
   });
 
-  
+  const featuredProducts = getRandomProducts(
+  products.filter(
+    (product) =>
+      !popularProducts.some((popular) => popular.id === product.id) &&
+      !trendingProducts.some((trending) => trending.id === product.id)
+  ),
+  4
+  )
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar
@@ -37,6 +56,32 @@ export default function HomeScreen() {
         <Swiper />
         <Categories />
 
+        <View style={styles.featuredSection}>
+  <View style={styles.featuredHeader}>
+    <Text style={styles.title}>Featured Products</Text>
+
+    <TouchableOpacity style={styles.seeAll}>
+      <Text style={styles.txt1}>See all</Text>
+    </TouchableOpacity>
+  </View>
+
+  <ScrollView
+    horizontal
+    showsHorizontalScrollIndicator={false}
+  >
+    {featuredProducts.map((product) => (
+      <FeaturedProductCard
+        key={product.id}
+        name={product.name}
+        size={product.size}
+        price={product.price}
+        previousPrice={product.previousPrice}
+        image={product.image}
+      />
+    ))}
+  </ScrollView>
+</View>
+
         <View style={styles.productSection}>
           <View style={styles.productHeader}>
             <Text style={styles.title}>Popular Products</Text>
@@ -46,11 +91,8 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
 
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-          >
-            {products.map((product) => (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {popularProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 name={product.name}
@@ -70,6 +112,18 @@ export default function HomeScreen() {
               <Text style={styles.txt1}>See all</Text>
             </TouchableOpacity>
           </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {trendingProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                name={product.name}
+                size={product.size}
+                price={product.price}
+                image={product.image}
+                priceChange={product.priceChange}
+              />
+            ))}
+          </ScrollView>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -125,4 +179,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+
+  featuredSection: {
+  gap: 16,
+  marginTop: 20,
+},
+
+featuredHeader: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+},
 });
