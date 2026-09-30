@@ -1,4 +1,4 @@
-import ProductCard from "@/components/productCard";
+
 import SearchCategories from "@/components/searchCategories";
 import { FONTS } from "@/constants/fonts";
 import { products } from "@/data/products";
@@ -31,7 +31,11 @@ export default function Search() {
 
       <View style={styles.container}>
         <View style={styles.searchBar}>
-          <MaterialCommunityIcons name="magnify" size={20} color="#6B7280" />
+          <MaterialCommunityIcons
+            name="magnify"
+            size={20}
+            color="#6B7280"
+          />
 
           <TextInput
             style={styles.input}
@@ -48,20 +52,61 @@ export default function Search() {
 
             {filteredProducts.length > 0 ? (
               <View style={styles.resultsList}>
-                {filteredProducts.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    name={product.name}
-                    size={product.size}
-                    price={product.price}
-                    image={product.image}
-                    priceChange={
-                      ((product.price - product.previousPrice) /
-                        product.previousPrice) *
-                      100
-                    }
-                  />
-                ))}
+                {filteredProducts.map((product) => {
+                  const priceChange =
+                    ((product.price - product.previousPrice) /
+                      product.previousPrice) *
+                    100;
+
+                  return (
+                    <TouchableOpacity
+                      key={product.id}
+                      style={styles.resultItem}
+                    >
+                      <View style={styles.resultInfo}>
+                        <Text style={styles.resultName}>
+                          {product.name}
+                        </Text>
+
+                        <Text style={styles.resultSize}>
+                          {product.size}
+                        </Text>
+                      </View>
+
+                      <View style={styles.resultPriceContainer}>
+                        <Text style={styles.resultPrice}>
+                          ₦{product.price.toLocaleString()}
+                        </Text>
+
+                        <View style={styles.priceChangeContainer}>
+                          <MaterialCommunityIcons
+                            name={
+                              priceChange >= 0
+                                ? "arrow-top-right"
+                                : "arrow-bottom-right"
+                            }
+                            size={14}
+                            color={priceChange >= 0 ? "#16A34A" : "#DC2626"}
+                          />
+
+                          <Text
+                            style={[
+                              styles.priceChange,
+                              {
+                                color:
+                                  priceChange >= 0
+                                    ? "#16A34A"
+                                    : "#DC2626",
+                              },
+                            ]}
+                          >
+                            {Math.abs(priceChange).toFixed(1)}%
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
             ) : (
               <View style={styles.emptyState}>
@@ -266,7 +311,54 @@ const styles = StyleSheet.create({
   },
 
   resultsList: {
-    gap: 12,
+    gap: 0,
+  },
+
+  resultItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
+  },
+
+  resultInfo: {
+    flex: 1,
+  },
+
+  resultName: {
+    fontFamily: FONTS.medium,
+    fontSize: 15,
+  },
+
+  resultSize: {
+    fontFamily: FONTS.regular,
+    fontSize: 12,
+    color: "#6B7280",
+    marginTop: 4,
+  },
+
+  resultPriceContainer: {
+    alignItems: "flex-end",
+    marginLeft: 16,
+  },
+
+  resultPrice: {
+    fontFamily: FONTS.medium,
+    fontSize: 15,
+  },
+
+  priceChangeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 4,
+  },
+
+  priceChange: {
+    fontFamily: FONTS.regular,
+    fontSize: 12,
+    marginLeft: 2,
   },
 
   emptyState: {
