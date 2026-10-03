@@ -49,7 +49,6 @@ export default function Search() {
         {searchQuery.length > 0 ? (
           <View style={styles.resultsSection}>
             <Text style={styles.txt}>Search results</Text>
-
             {filteredProducts.length > 0 ? (
               <View style={styles.resultsList}>
                 {filteredProducts.map((product) => {
