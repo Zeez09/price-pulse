@@ -28,7 +28,6 @@ export default function Search() {
         barStyle="dark-content"
         backgroundColor="transparent"
       />
-
       <View style={styles.container}>
         <View style={styles.searchBar}>
           <MaterialCommunityIcons
@@ -36,7 +35,6 @@ export default function Search() {
             size={20}
             color="#6B7280"
           />
-
           <TextInput
             style={styles.input}
             placeholder="Food, drinks, groceries..."
@@ -45,7 +43,6 @@ export default function Search() {
             onChangeText={setSearchQuery}
           />
         </View>
-
         {searchQuery.length > 0 ? (
           <View style={styles.resultsSection}>
             <Text style={styles.txt}>Search results</Text>
@@ -56,7 +53,6 @@ export default function Search() {
                     ((product.price - product.previousPrice) /
                       product.previousPrice) *
                     100;
-
                   return (
                     <TouchableOpacity
                       key={product.id}
@@ -66,17 +62,14 @@ export default function Search() {
                         <Text style={styles.resultName}>
                           {product.name}
                         </Text>
-
                         <Text style={styles.resultSize}>
                           {product.size}
                         </Text>
                       </View>
-
                       <View style={styles.resultPriceContainer}>
                         <Text style={styles.resultPrice}>
                           ₦{product.price.toLocaleString()}
                         </Text>
-
                         <View style={styles.priceChangeContainer}>
                           <MaterialCommunityIcons
                             name={
@@ -87,7 +80,6 @@ export default function Search() {
                             size={14}
                             color={priceChange >= 0 ? "#16A34A" : "#DC2626"}
                           />
-
                           <Text
                             style={[
                               styles.priceChange,
@@ -114,9 +106,7 @@ export default function Search() {
                   size={40}
                   color="#9CA3AF"
                 />
-
                 <Text style={styles.emptyTitle}>No products found</Text>
-
                 <Text style={styles.emptyText}>
                   Try searching for another product.
                 </Text>
@@ -126,44 +116,36 @@ export default function Search() {
         ) : (
           <>
             <SearchCategories />
-
             <View style={styles.searchesSection}>
               <View style={styles.searchHeader}>
                 <Text style={styles.txt}>Recent searches</Text>
-
                 <MaterialCommunityIcons
                   name="history"
                   size={24}
                   color="#C8A2C8"
                 />
               </View>
-
               <View style={styles.tagsContainer}>
                 <TouchableOpacity style={styles.tag}>
                   <Text style={styles.tagText}>Indomie</Text>
                 </TouchableOpacity>
-
                 <TouchableOpacity style={styles.tag}>
                   <Text style={styles.tagText}>Peak Milk</Text>
                 </TouchableOpacity>
-
                 <TouchableOpacity style={styles.tag}>
                   <Text style={styles.tagText}>Golden Penny</Text>
                 </TouchableOpacity>
               </View>
             </View>
-
             <View style={styles.searchesSection}>
               <View style={styles.searchHeader}>
                 <Text style={styles.txt}>Trending</Text>
-
                 <MaterialCommunityIcons
                   name="trending-up"
                   size={24}
                   color="#C8A2C8"
                 />
               </View>
-
               <View style={styles.trendingList}>
                 <TouchableOpacity style={styles.trendingItem}>
                   <Text style={styles.trendingNumber}>01</Text>
