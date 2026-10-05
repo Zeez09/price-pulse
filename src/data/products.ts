@@ -1,98 +1,81 @@
-export const products = [
+export interface Product {
+  id: string;
+  name: string;
+  size: string;
+  image: string;
+}
+
+export const products: Product[] = [
   {
     id: "1",
     name: "Indomie",
     size: "70g",
-    price: 500,
-    previousPrice: 450,
     image: "https://picsum.photos/300/300?random=1",
   },
   {
     id: "2",
     name: "Peak Milk",
     size: "400g",
-    price: 4500,
-    previousPrice: 4800,
     image: "https://picsum.photos/300/300?random=2",
   },
   {
     id: "3",
     name: "Milo",
     size: "400g",
-    price: 5200,
-    previousPrice: 5000,
     image: "https://picsum.photos/300/300?random=3",
   },
   {
     id: "4",
     name: "Golden Penny",
     size: "500g",
-    price: 1200,
-    previousPrice: 1350,
     image: "https://picsum.photos/300/300?random=4",
   },
   {
     id: "5",
     name: "Dano Milk",
     size: "400g",
-    price: 4300,
-    previousPrice: 4100,
     image: "https://picsum.photos/300/300?random=5",
   },
   {
     id: "6",
     name: "Dangote Sugar",
     size: "1kg",
-    price: 2100,
-    previousPrice: 1950,
     image: "https://picsum.photos/300/300?random=6",
   },
   {
     id: "7",
     name: "Golden Morn",
     size: "500g",
-    price: 3200,
-    previousPrice: 3500,
     image: "https://picsum.photos/300/300?random=7",
   },
   {
     id: "8",
     name: "Peak Evaporated Milk",
     size: "170g",
-    price: 1200,
-    previousPrice: 1100,
     image: "https://picsum.photos/300/300?random=8",
   },
   {
     id: "9",
     name: "Indomie Onion Chicken",
     size: "70g",
-    price: 550,
-    previousPrice: 500,
     image: "https://picsum.photos/300/300?random=9",
   },
   {
     id: "10",
     name: "Power Oil",
     size: "1L",
-    price: 4800,
-    previousPrice: 5200,
     image: "https://picsum.photos/300/300?random=10",
   },
   {
     id: "11",
     name: "Gino Tomato Paste",
     size: "70g",
-    price: 700,
-    previousPrice: 650,
     image: "https://picsum.photos/300/300?random=11",
   },
   {
     id: "12",
     name: "Omo Detergent",
     size: "900g",
-    price: 6500,
-    previousPrice: 7000,
     image: "https://picsum.photos/300/300?random=12",
   },
 ];

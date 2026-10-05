@@ -1,7 +1,9 @@
-
 import SearchCategories from "@/components/searchCategories";
+import VendorCard from "@/components/vendorCard";
 import { FONTS } from "@/constants/fonts";
+import { priceListings } from "@/data/priceListings";
 import { products } from "@/data/products";
+import { vendors } from "@/data/vendors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
 import {
@@ -17,8 +19,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function Search() {
   const [searchQuery, setSearchQuery] = useState("");
 
+  const query = searchQuery.toLowerCase().trim();
+
   const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    product.name.toLowerCase().includes(query)
+  );
+
+  const filteredVendors = vendors.filter(
+    (vendor) =>
+      vendor.name.toLowerCase().includes(query) ||
+      vendor.type.toLowerCase().includes(query) ||
+      vendor.location.toLowerCase().includes(query) ||
+      vendor.city.toLowerCase().includes(query)
   );
 
   return (
@@ -28,13 +40,16 @@ export default function Search() {
         barStyle="dark-content"
         backgroundColor="transparent"
       />
+
       <View style={styles.container}>
+        {/* Search Bar */}
         <View style={styles.searchBar}>
           <MaterialCommunityIcons
             name="magnify"
             size={20}
             color="#6B7280"
           />
+
           <TextInput
             style={styles.input}
             placeholder="Food, drinks, groceries..."
@@ -43,109 +58,190 @@ export default function Search() {
             onChangeText={setSearchQuery}
           />
         </View>
+
         {searchQuery.length > 0 ? (
           <View style={styles.resultsSection}>
             <Text style={styles.txt}>Search results</Text>
-            {filteredProducts.length > 0 ? (
-              <View style={styles.resultsList}>
+
+            {/* PRODUCT RESULTS */}
+            {filteredProducts.length > 0 && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Products</Text>
+
                 {filteredProducts.map((product) => {
-                  const priceChange =
-                    ((product.price - product.previousPrice) /
-                      product.previousPrice) *
-                    100;
+                  const listings = priceListings.filter(
+                    (listing) => listing.productId === product.id
+                  );
+
                   return (
                     <TouchableOpacity
                       key={product.id}
-                      style={styles.resultItem}
+                      style={styles.productCard}
                     >
-                      <View style={styles.resultInfo}>
-                        <Text style={styles.resultName}>
-                          {product.name}
-                        </Text>
-                        <Text style={styles.resultSize}>
-                          {product.size}
-                        </Text>
-                      </View>
-                      <View style={styles.resultPriceContainer}>
-                        <Text style={styles.resultPrice}>
-                          ₦{product.price.toLocaleString()}
-                        </Text>
-                        <View style={styles.priceChangeContainer}>
-                          <MaterialCommunityIcons
-                            name={
-                              priceChange >= 0
-                                ? "arrow-top-right"
-                                : "arrow-bottom-right"
-                            }
-                            size={14}
-                            color={priceChange >= 0 ? "#16A34A" : "#DC2626"}
-                          />
-                          <Text
-                            style={[
-                              styles.priceChange,
-                              {
-                                color:
-                                  priceChange >= 0
-                                    ? "#16A34A"
-                                    : "#DC2626",
-                              },
-                            ]}
-                          >
-                            {Math.abs(priceChange).toFixed(1)}%
+                      <View style={styles.productHeader}>
+                        <View style={styles.productInfo}>
+                          <Text style={styles.productName}>
+                            {product.name}
+                          </Text>
+
+                          <Text style={styles.productSize}>
+                            {product.size}
                           </Text>
                         </View>
+
+                        <Text style={styles.productPrice}>
+                          ₦{product.price.toLocaleString()}
+                        </Text>
                       </View>
+
+                      <View style={styles.divider} />
+
+                      <View style={styles.availableRow}>
+                        <Text style={styles.availableText}>
+                          Available at {listings.length}{" "}
+                          {listings.length === 1 ? "place" : "places"}
+                        </Text>
+
+                        <MaterialCommunityIcons
+                          name="chevron-right"
+                          size={20}
+                          color="#6B7280"
+                        />
+                      </View>
+
+                      {listings.slice(0, 3).map((listing) => {
+                        const vendor = vendors.find(
+                          (item) => item.id === listing.vendorId
+                        );
+
+                        if (!vendor) return null;
+
+                        return (
+                          <View
+                            key={listing.id}
+                            style={styles.vendorPriceRow}
+                          >
+                            <View style={styles.vendorNameContainer}>
+                              <Text style={styles.vendorName}>
+                                {vendor.name}
+                              </Text>
+
+                              {vendor.verified && (
+                                <MaterialCommunityIcons
+                                  name="check-decagram"
+                                  size={14}
+                                  color="#2563EB"
+                                />
+                              )}
+                            </View>
+
+                            <View style={styles.priceContainer}>
+                              <Text style={styles.listingPrice}>
+                                ₦{listing.price.toLocaleString()}
+                              </Text>
+
+                              {listing.price ===
+                                Math.min(
+                                  ...listings.map(
+                                    (item) => item.price
+                                  )
+                                ) && (
+                                <Text style={styles.bestPrice}>
+                                  Best price
+                                </Text>
+                              )}
+                            </View>
+                          </View>
+                        );
+                      })}
                     </TouchableOpacity>
                   );
                 })}
               </View>
-            ) : (
-              <View style={styles.emptyState}>
-                <MaterialCommunityIcons
-                  name="magnify-close"
-                  size={40}
-                  color="#9CA3AF"
-                />
-                <Text style={styles.emptyTitle}>No products found</Text>
-                <Text style={styles.emptyText}>
-                  Try searching for another product.
-                </Text>
+            )}
+
+            {/* VENDOR RESULTS */}
+            {filteredVendors.length > 0 && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Vendors</Text>
+
+                {filteredVendors.map((vendor) => (
+                  <VendorCard
+                    key={vendor.id}
+                    name={vendor.name}
+                    type={vendor.type}
+                    image={vendor.image}
+                    location={`${vendor.location}, ${vendor.city}`}
+                    openingHours={vendor.openingHours}
+                    verified={vendor.verified}
+                  />
+                ))}
               </View>
             )}
+
+            {/* NOTHING FOUND */}
+            {filteredProducts.length === 0 &&
+              filteredVendors.length === 0 && (
+                <View style={styles.emptyState}>
+                  <MaterialCommunityIcons
+                    name="magnify-close"
+                    size={40}
+                    color="#9CA3AF"
+                  />
+
+                  <Text style={styles.emptyTitle}>
+                    Nothing found
+                  </Text>
+
+                  <Text style={styles.emptyText}>
+                    Try searching for another product, vendor or location.
+                  </Text>
+                </View>
+              )}
           </View>
         ) : (
           <>
             <SearchCategories />
+
+            {/* Recent Searches */}
             <View style={styles.searchesSection}>
               <View style={styles.searchHeader}>
                 <Text style={styles.txt}>Recent searches</Text>
+
                 <MaterialCommunityIcons
                   name="history"
                   size={24}
                   color="#C8A2C8"
                 />
               </View>
+
               <View style={styles.tagsContainer}>
                 <TouchableOpacity style={styles.tag}>
                   <Text style={styles.tagText}>Indomie</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.tag}>
                   <Text style={styles.tagText}>Peak Milk</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.tag}>
                   <Text style={styles.tagText}>Golden Penny</Text>
                 </TouchableOpacity>
               </View>
             </View>
+
+            {/* Trending */}
             <View style={styles.searchesSection}>
               <View style={styles.searchHeader}>
                 <Text style={styles.txt}>Trending</Text>
+
                 <MaterialCommunityIcons
                   name="trending-up"
                   size={24}
                   color="#C8A2C8"
                 />
               </View>
+
               <View style={styles.trendingList}>
                 <TouchableOpacity style={styles.trendingItem}>
                   <Text style={styles.trendingNumber}>01</Text>
@@ -171,7 +267,9 @@ export default function Search() {
 
                 <TouchableOpacity style={styles.trendingItem}>
                   <Text style={styles.trendingNumber}>03</Text>
-                  <Text style={styles.trendingText}>Cooking Oil</Text>
+                  <Text style={styles.trendingText}>
+                    Cooking Oil
+                  </Text>
 
                   <MaterialCommunityIcons
                     name="arrow-top-right"
@@ -288,58 +386,106 @@ const styles = StyleSheet.create({
 
   resultsSection: {
     marginTop: 20,
-    gap: 14,
+    gap: 18,
   },
 
-  resultsList: {
-    gap: 0,
+  section: {
+    gap: 12,
   },
 
-  resultItem: {
+  sectionTitle: {
+    fontFamily: FONTS.medium,
+    fontSize: 15,
+    color: "#6B7280",
+  },
+
+  productCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: "#F1F5F9",
+  },
+
+  productHeader: {
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E5E7EB",
+    alignItems: "center",
   },
 
-  resultInfo: {
+  productInfo: {
     flex: 1,
   },
 
-  resultName: {
+  productName: {
     fontFamily: FONTS.medium,
-    fontSize: 15,
+    fontSize: 16,
   },
 
-  resultSize: {
+  productSize: {
     fontFamily: FONTS.regular,
     fontSize: 12,
     color: "#6B7280",
     marginTop: 4,
   },
 
-  resultPriceContainer: {
-    alignItems: "flex-end",
-    marginLeft: 16,
-  },
-
-  resultPrice: {
+  productPrice: {
     fontFamily: FONTS.medium,
-    fontSize: 15,
+    fontSize: 16,
   },
 
-  priceChangeContainer: {
+  divider: {
+    height: 1,
+    backgroundColor: "#E5E7EB",
+    marginVertical: 12,
+  },
+
+  availableRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 4,
+    justifyContent: "space-between",
+    marginBottom: 8,
   },
 
-  priceChange: {
+  availableText: {
+    fontFamily: FONTS.medium,
+    fontSize: 13,
+  },
+
+  vendorPriceRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 9,
+    borderTopWidth: 1,
+    borderTopColor: "#F3F4F6",
+  },
+
+  vendorNameContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+
+  vendorName: {
     fontFamily: FONTS.regular,
-    fontSize: 12,
-    marginLeft: 2,
+    fontSize: 13,
+  },
+
+  priceContainer: {
+    alignItems: "flex-end",
+  },
+
+  listingPrice: {
+    fontFamily: FONTS.medium,
+    fontSize: 13,
+  },
+
+  bestPrice: {
+    fontFamily: FONTS.regular,
+    fontSize: 10,
+    color: "#16A34A",
+    marginTop: 2,
   },
 
   emptyState: {
@@ -359,5 +505,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#6B7280",
     marginTop: 5,
+    textAlign: "center",
   },
 });
