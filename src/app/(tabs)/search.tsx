@@ -1,10 +1,14 @@
 import SearchCategories from "@/components/searchCategories";
 import VendorCard from "@/components/vendorCard";
 import { FONTS } from "@/constants/fonts";
-import { priceListings } from "@/data/priceListings";
+import {
+  getLowestPrice,
+  getProductListings,
+} from "@/data/priceHelpers";
 import { products } from "@/data/products";
 import { vendors } from "@/data/vendors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
   StatusBar,
@@ -17,12 +21,14 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Search() {
+  const router = useRouter();
+
   const [searchQuery, setSearchQuery] = useState("");
 
   const query = searchQuery.toLowerCase().trim();
 
   const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(query)
+    `${product.name} ${product.size}`.toLowerCase().includes(query)
   );
 
   const filteredVendors = vendors.filter(
@@ -69,18 +75,32 @@ export default function Search() {
                 <Text style={styles.sectionTitle}>Products</Text>
 
                 {filteredProducts.map((product) => {
-                  const listings = priceListings.filter(
-                    (listing) => listing.productId === product.id
+                  const listings = getProductListings(product.id);
+
+                  const lowestPrice = getLowestPrice(product.id);
+
+                  // Show cheapest vendors first
+                  const sortedListings = [...listings].sort(
+                    (a, b) => a.price - b.price
                   );
 
                   return (
                     <TouchableOpacity
                       key={product.id}
                       style={styles.productCard}
+                      onPress={() =>
+                        router.push({
+                          pathname: "/product/[id]",
+                          params: { id: String(product.id) },
+                        })
+                      }
                     >
                       <View style={styles.productHeader}>
                         <View style={styles.productInfo}>
-                          <Text style={styles.productName}>
+                          <Text
+                            style={styles.productName}
+                            numberOfLines={1}
+                          >
                             {product.name}
                           </Text>
 
@@ -89,9 +109,17 @@ export default function Search() {
                           </Text>
                         </View>
 
-                        <Text style={styles.productPrice}>
-                          ₦{product.price.toLocaleString()}
-                        </Text>
+                        {lowestPrice !== null && (
+                          <View style={styles.productPriceContainer}>
+                            <Text style={styles.fromText}>
+                              From
+                            </Text>
+
+                            <Text style={styles.productPrice}>
+                              ₦{lowestPrice.toLocaleString()}
+                            </Text>
+                          </View>
+                        )}
                       </View>
 
                       <View style={styles.divider} />
@@ -99,7 +127,9 @@ export default function Search() {
                       <View style={styles.availableRow}>
                         <Text style={styles.availableText}>
                           Available at {listings.length}{" "}
-                          {listings.length === 1 ? "place" : "places"}
+                          {listings.length === 1
+                            ? "place"
+                            : "places"}
                         </Text>
 
                         <MaterialCommunityIcons
@@ -109,12 +139,17 @@ export default function Search() {
                         />
                       </View>
 
-                      {listings.slice(0, 3).map((listing) => {
+                      {sortedListings.slice(0, 3).map((listing) => {
                         const vendor = vendors.find(
                           (item) => item.id === listing.vendorId
                         );
 
-                        if (!vendor) return null;
+                        if (!vendor) {
+                          return null;
+                        }
+
+                        const isBestPrice =
+                          listing.price === lowestPrice;
 
                         return (
                           <View
@@ -140,12 +175,7 @@ export default function Search() {
                                 ₦{listing.price.toLocaleString()}
                               </Text>
 
-                              {listing.price ===
-                                Math.min(
-                                  ...listings.map(
-                                    (item) => item.price
-                                  )
-                                ) && (
+                              {isBestPrice && (
                                 <Text style={styles.bestPrice}>
                                   Best price
                                 </Text>
@@ -194,7 +224,8 @@ export default function Search() {
                   </Text>
 
                   <Text style={styles.emptyText}>
-                    Try searching for another product, vendor or location.
+                    Try searching for another product, vendor or
+                    location.
                   </Text>
                 </View>
               )}
@@ -427,6 +458,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#6B7280",
     marginTop: 4,
+  },
+
+  productPriceContainer: {
+    alignItems: "flex-end",
+  },
+
+  fromText: {
+    fontFamily: FONTS.regular,
+    fontSize: 10,
+    color: "#6B7280",
   },
 
   productPrice: {

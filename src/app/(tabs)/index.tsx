@@ -4,6 +4,7 @@ import HomeHeader from "@/components/homeHeader";
 import ProductCard from "@/components/productCard";
 import Swiper from "@/components/swiper";
 import { FONTS } from "@/constants/fonts";
+import { getProductWithPrice } from "@/data/priceHelpers";
 import { products } from "@/data/products";
 import { getRandomProducts } from "@/data/utils";
 import {
@@ -21,27 +22,37 @@ export default function HomeScreen() {
 
   const trendingProducts = getRandomProducts(
     products.filter(
-      (product) => !popularProducts.some((popular) => popular.id === product.id)
+      (product) =>
+        !popularProducts.some((popular) => popular.id === product.id)
     ),
     4
-  ).map((product) => {
-    const priceChange =
-      ((product.price - product.previousPrice) / product.previousPrice) * 100;
+  )
+    .map((product) => getProductWithPrice(product.id))
+    .filter((product) => product !== null)
+    .map((product) => {
+      const priceChange =
+        product.previousPrice && product.previousPrice > 0
+          ? ((product.price - product.previousPrice) /
+              product.previousPrice) *
+            100
+          : 0;
 
-    return {
-      ...product,
-      priceChange,
-    };
-  });
+      return {
+        ...product,
+        priceChange,
+      };
+    });
 
   const featuredProducts = getRandomProducts(
-  products.filter(
-    (product) =>
-      !popularProducts.some((popular) => popular.id === product.id) &&
-      !trendingProducts.some((trending) => trending.id === product.id)
-  ),
-  4
+    products.filter(
+      (product) =>
+        !popularProducts.some((popular) => popular.id === product.id) &&
+        !trendingProducts.some((trending) => trending.id === product.id)
+    ),
+    4
   )
+    .map((product) => getProductWithPrice(product.id))
+    .filter((product) => product !== null);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -53,35 +64,39 @@ export default function HomeScreen() {
 
       <ScrollView style={styles.container}>
         <HomeHeader />
+
         <Swiper />
+
         <Categories />
 
+        {/* Featured Products */}
         <View style={styles.featuredSection}>
-  <View style={styles.featuredHeader}>
-    <Text style={styles.title}>Featured Products</Text>
+          <View style={styles.featuredHeader}>
+            <Text style={styles.title}>Featured Products</Text>
 
-    <TouchableOpacity style={styles.seeAll}>
-      <Text style={styles.txt1}>See all</Text>
-    </TouchableOpacity>
-  </View>
+            <TouchableOpacity style={styles.seeAll}>
+              <Text style={styles.txt1}>See all</Text>
+            </TouchableOpacity>
+          </View>
 
-  <ScrollView
-    horizontal
-    showsHorizontalScrollIndicator={false}
-  >
-    {featuredProducts.map((product) => (
-      <FeaturedProductCard
-        key={product.id}
-        name={product.name}
-        size={product.size}
-        price={product.price}
-        previousPrice={product.previousPrice}
-        image={product.image}
-      />
-    ))}
-  </ScrollView>
-</View>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          >
+            {featuredProducts.map((product) => (
+              <FeaturedProductCard
+                key={product.id}
+                name={product.name}
+                size={product.size}
+                price={product.price ?? 0}
+                previousPrice={product.previousPrice ?? 0}
+                image={product.image}
+              />
+            ))}
+          </ScrollView>
+        </View>
 
+        {/* Popular Products */}
         <View style={styles.productSection}>
           <View style={styles.productHeader}>
             <Text style={styles.title}>Popular Products</Text>
@@ -91,19 +106,31 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
 
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {popularProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                name={product.name}
-                size={product.size}
-                price={product.price}
-                image={product.image}
-              />
-            ))}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          >
+            {popularProducts.map((product) => {
+              const productWithPrice = getProductWithPrice(product.id);
+
+              if (!productWithPrice) {
+                return null;
+              }
+
+              return (
+                <ProductCard
+                  key={product.id}
+                  name={product.name}
+                  size={product.size}
+                  price={productWithPrice.price ?? 0}
+                  image={product.image}
+                />
+              );
+            })}
           </ScrollView>
         </View>
 
+        {/* Trending Prices */}
         <View style={styles.trendingSection}>
           <View style={styles.trendingHeader}>
             <Text style={styles.title}>Trending Prices</Text>
@@ -112,13 +139,17 @@ export default function HomeScreen() {
               <Text style={styles.txt1}>See all</Text>
             </TouchableOpacity>
           </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          >
             {trendingProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 name={product.name}
                 size={product.size}
-                price={product.price}
+                price={product.price ?? 0}
                 image={product.image}
                 priceChange={product.priceChange}
               />
@@ -181,13 +212,13 @@ const styles = StyleSheet.create({
   },
 
   featuredSection: {
-  gap: 16,
-  marginTop: 20,
-},
+    gap: 16,
+    marginTop: 20,
+  },
 
-featuredHeader: {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-},
+  featuredHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
 });
