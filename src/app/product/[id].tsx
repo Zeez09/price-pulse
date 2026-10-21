@@ -1,8 +1,5 @@
 import { FONTS } from "@/constants/fonts";
-import {
-  getLowestPrice,
-  getProductListings,
-} from "@/data/priceHelpers";
+import { getLowestPrice, getProductListings } from "@/data/priceHelpers";
 import { products } from "@/data/products";
 import { vendors } from "@/data/vendors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
